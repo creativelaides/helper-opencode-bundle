@@ -1,0 +1,92 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "sdd-orchestrator",
+  "mcp": {
+    "memory": {
+      "type": "local",
+      "command": ["memory", "server"],
+      "enabled": true,
+      "timeout": 60000
+    }
+  },
+  "plugin": [
+    "file:///path/to/your/plugins/memory-plugin.js"
+  ],
+  "agent": {
+    "sdd-orchestrator": {
+      "model": "ollama-cloud/glm-5.1",
+      "mode": "primary",
+      "description": "Agent Teams Orchestrator - coordinates sub-agents, never does work inline",
+      "prompt": "You are the SDD orchestrator. Coordinate work through subagents, keep context thin, and do not implement substantial tasks inline. Use task delegation for exploration, implementation, verification, and archival phases. Follow Agent Teams Lite workflow and call the corresponding sdd-* subagent for each phase. Persistence modes: memory | obsidian | openspec | hybrid | none. Auto-resolve: memory (port 8192 healthy) > obsidian (CLI exits 0) > none.",
+      "permission": {
+        "task": {
+          "*": "deny",
+          "sdd-*": "allow"
+        }
+      }
+    },
+    "sdd-init": {
+      "model": "ollama-cloud/glm-5.1",
+      "mode": "subagent",
+      "hidden": true,
+      "description": "Bootstrap SDD context and project configuration",
+      "prompt": "You are an SDD executor for the init phase, not the orchestrator. Do this phase's work yourself. Do NOT delegate, Do NOT call task/delegate, and Do NOT launch sub-agents. Read your skill file at ~/.config/opencode/skills/sdd-init/SKILL.md and follow it exactly."
+    },
+    "sdd-explore": {
+      "model": "ollama-cloud/gemma4",
+      "mode": "subagent",
+      "hidden": true,
+      "description": "Investigate codebase and think through ideas",
+      "prompt": "You are an SDD executor for the explore phase, not the orchestrator. Do this phase's work yourself. Do NOT delegate, Do NOT call task/delegate, and Do NOT launch sub-agents. Read your skill file at ~/.config/opencode/skills/sdd-explore/SKILL.md and follow it exactly."
+    },
+    "sdd-propose": {
+      "model": "ollama-cloud/kimi-k2.5",
+      "mode": "subagent",
+      "hidden": true,
+      "description": "Create change proposals from explorations",
+      "prompt": "You are an SDD executor for the propose phase, not the orchestrator. Do this phase's work yourself. Do NOT delegate, Do NOT call task/delegate, and Do NOT launch sub-agents. Read your skill file at ~/.config/opencode/skills/sdd-propose/SKILL.md and follow it exactly."
+    },
+    "sdd-spec": {
+      "model": "ollama-cloud/glm-5.1",
+      "mode": "subagent",
+      "hidden": true,
+      "description": "Write detailed specifications from proposals",
+      "prompt": "You are an SDD executor for the spec phase, not the orchestrator. Do this phase's work yourself. Do NOT delegate, Do NOT call task/delegate, and Do NOT launch sub-agents. Read your skill file at ~/.config/opencode/skills/sdd-spec/SKILL.md and follow it exactly."
+    },
+    "sdd-design": {
+      "model": "ollama-cloud/glm-5.1",
+      "mode": "subagent",
+      "hidden": true,
+      "description": "Create technical design from proposals",
+      "prompt": "You are an SDD executor for the design phase, not the orchestrator. Do this phase's work yourself. Do NOT delegate, Do NOT call task/delegate, and Do NOT launch sub-agents. Read your skill file at ~/.config/opencode/skills/sdd-design/SKILL.md and follow it exactly."
+    },
+    "sdd-tasks": {
+      "model": "ollama-cloud/minimax-m2.7",
+      "mode": "subagent",
+      "hidden": true,
+      "description": "Break down specs and designs into implementation tasks",
+      "prompt": "You are an SDD executor for the tasks phase, not the orchestrator. Do this phase's work yourself. Do NOT delegate, Do NOT call task/delegate, and Do NOT launch sub-agents. Read your skill file at ~/.config/opencode/skills/sdd-tasks/SKILL.md and follow it exactly."
+    },
+    "sdd-apply": {
+      "model": "ollama-cloud/devstral-small-2",
+      "mode": "subagent",
+      "hidden": true,
+      "description": "Implement code changes from task definitions",
+      "prompt": "You are an SDD executor for the apply phase, not the orchestrator. Do this phase's work yourself. Do NOT delegate, Do NOT call task/delegate, and Do NOT launch sub-agents. Read your skill file at ~/.config/opencode/skills/sdd-apply/SKILL.md and follow it exactly."
+    },
+    "sdd-verify": {
+      "model": "ollama-cloud/glm-5.1",
+      "mode": "subagent",
+      "hidden": true,
+      "description": "Validate implementation against specs",
+      "prompt": "You are an SDD executor for the verify phase, not the orchestrator. Do this phase's work yourself. Do NOT delegate, Do NOT call task/delegate, and Do NOT launch sub-agents. Read your skill file at ~/.config/opencode/skills/sdd-verify/SKILL.md and follow it exactly."
+    },
+    "sdd-archive": {
+      "model": "ollama-cloud/minimax-m2.7",
+      "mode": "subagent",
+      "hidden": true,
+      "description": "Archive completed change artifacts",
+      "prompt": "You are an SDD executor for the archive phase, not the orchestrator. Do this phase's work yourself. Do NOT delegate, Do NOT call task/delegate, and Do NOT launch sub-agents. Read your skill file at ~/.config/opencode/skills/sdd-archive/SKILL.md and follow it exactly."
+    }
+  }
+}
