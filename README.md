@@ -99,9 +99,9 @@ The `opencode.json.example` includes a full SDD orchestrator + 9 sub-agent confi
 
 ---
 
-## Persistence Modes
+## Persistence Backends
 
-Each SDD skill supports multiple persistence backends:
+Each SDD skill supports multiple persistence backends for storing artifacts across sessions:
 
 | Mode | Description |
 |------|-------------|
@@ -112,6 +112,16 @@ Each SDD skill supports multiple persistence backends:
 | `none` | Ephemeral only — artifacts lost when session ends. |
 
 The orchestrator auto-resolves the mode: Memory (port 8192 healthy) > Obsidian (CLI exits 0) > none.
+
+### Required Software
+
+| Backend | Software | Install |
+|---------|----------|---------|
+| **Memory** | [mcp-memory-service](https://github.com/doobidoo/mcp-memory-service) — A semantic memory server using sentence-transformers for embeddings | `pip install mcp-memory-service` or `uvx mcp-memory-service` |
+| **OpenSpec** | [OpenSpec](https://github.com/Fission-AI/OpenSpec/) — Spec-driven development directory structure and tooling | Clone and follow the repo's setup instructions |
+| **Obsidian** | [Obsidian](https://obsidian.md) — A local-first, Markdown-based knowledge base with frontmatter, wikilinks, and graph view | Download from [obsidian.md](https://obsidian.md) |
+
+> **Note**: None of these backends are required. The bundle works in `none` mode out of the box with ephemeral, session-only persistence. Install only the backends you need.
 
 ---
 
@@ -152,6 +162,9 @@ cd ~/.config/opencode && npm install
 ## Acknowledgments
 
 - **Gentleman Programming** — Original author of [Agent Teams Lite](https://github.com/Gentleman-Programming/agent-teams-lite), the foundation of this bundle
+- **doobidoo** — [mcp-memory-service](https://github.com/doobidoo/mcp-memory-service), the semantic memory backend
+- **Fission AI** — [OpenSpec](https://github.com/Fission-AI/OpenSpec/), the spec-driven development framework
+- **Obsidian** — [obsidian.md](https://obsidian.md), the knowledge base and note-taking app
 - **OpenCode** — The AI coding platform this bundle is designed for
 
 ---
